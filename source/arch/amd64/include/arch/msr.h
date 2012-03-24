@@ -1,0 +1,1 @@
+#define IA32_PAT_MSR 0x277

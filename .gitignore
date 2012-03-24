@@ -1,0 +1,10 @@
+*.o
+*.a
+*.d
+*.s
+*.bin
+*.elf64
+*.vmdk
+*.img
+!/source/template.img
+/toolchain
