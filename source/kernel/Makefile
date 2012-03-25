@@ -10,7 +10,8 @@ clean-kernel :
 	rm -f $(DEPDIR)/kernel/*.d
 	rm -f $(DEPDIR)/kernel/*/*.d
 
-KERNEL_CCFLAGS = -O2 -g -Wall -Wextra -m64 -std=c99 $(DEFAULTINCDIRS) -nostdlib -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-3dnow
+KERNEL_WARNINGS = -Wall -Wextra
+KERNEL_CCFLAGS = -O2 -g $(KERNEL_WARNINGS) -m64 -std=c99 $(DEFAULTINCDIRS) -nostdlib -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-3dnow
 
 KERNEL_SRCROOT = $(SRCDIR)/kernel
 KERNEL_SRCSUBS = mm
@@ -26,17 +27,21 @@ KERNEL_DEPS = $(patsubst %.d, $(DEPDIR)/kernel/%.d, $(patsubst %.c, %.d, $(notdi
 KERNEL_DEPS += $(foreach SUBDIR,$(KERNEL_SRCSUBS),$(patsubst %.d, $(DEPDIR)/kernel/$(SUBDIR)/%.d, $(patsubst %.c, %.d, $(notdir $(wildcard $(SRCDIR)/kernel/$(SUBDIR)/*.c)))))
 
 $(KERNEL_DEPS) : $(DEPDIR)/%.d : $(SRCDIR)/%.c
-	$(CC) $(KERNEL_CCFLAGS) -c $< -MM -MT $(OBJDIR)/$(patsubst %.c,%.o, $<) -o $@
+	@$(CC) $(KERNEL_CCFLAGS) -c $< -MM -MT $(OBJDIR)/$(patsubst %.c,%.o, $<) -o $@
+	@echo CC $@
 
 -include $(KERNEL_DEPS)
 
 $(OBJDIR)/kernel/bootstrap.o : $(BINDIR)/trampoline.bin
 
 $(KERNEL_CC_OBJS): $(OBJDIR)/%.o: %.c
-	$(CC) $(KERNEL_CCFLAGS) -c $< -o $@ -Wa,-aln=$(ASMDIR)/$(patsubst %.c,%.s, $<)
+	@$(CC) $(KERNEL_CCFLAGS) -c $< -o $@ -Wa,-aln=$(ASMDIR)/$(patsubst %.c,%.s, $<)
+	@echo CC $@
 
 $(KERNEL_AS_OBJS): $(OBJDIR)/%.o: $(SRCDIR)/%.asm
-	$(AS) -f elf64 -o $@ $<
+	@$(AS) -f elf64 -o $@ $<
+	@echo NASM $@
 
 $(BINDIR)/kernel.elf64 : $(KERNEL_AS_OBJS) $(KERNEL_CC_OBJS) $(OBJDIR)/pdclib.a $(SRCDIR)/kernel/linker.ld
-	$(LD) -T $(SRCDIR)/kernel/linker.ld -z max-page-size=0x1000 -o $(BINDIR)/kernel.elf64 $(KERNEL_AS_OBJS) $(KERNEL_CC_OBJS) $(OBJDIR)/pdclib.a
+	@$(LD) -T $(SRCDIR)/kernel/linker.ld -z max-page-size=0x1000 -o $(BINDIR)/kernel.elf64 $(KERNEL_AS_OBJS) $(KERNEL_CC_OBJS) $(OBJDIR)/pdclib.a
+	@echo LD $@

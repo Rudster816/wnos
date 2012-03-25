@@ -9,8 +9,9 @@
 
 global_values_t globals;
 extern unsigned long kernel_image_end; // Defined in the linker script, linker.ld
+#define UNUSED __attribute__((unused))
 
-void kmain(multiboot_info_t* mbd, unsigned int magic)
+void kmain(multiboot_info_t* mbd, UNUSED unsigned int magic)
 {
 	unsigned long ksize;
 

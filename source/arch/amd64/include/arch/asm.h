@@ -70,6 +70,7 @@ inline unsigned long read_msr(unsigned int msr)
 						 :"=A" (value)
 						 :"c" (msr)
 						 );
+	return value;
 }
 
 static

@@ -44,7 +44,7 @@ void pmm_freepage(uint64_t addr)
 
 int pmm_init()
 {
-	int i;
+	u64 i;
 	uint64_t t;
 	mmap_entry_t* entry = (mmap_entry_t*)(uintptr_t)globals.mbinfo->mmap_addr;
 
@@ -96,9 +96,9 @@ int pmm_init()
 	return 0;
 }
 
-int pmm_free(uint64_t *src, unsigned int pgcount)
+/*int pmm_free(uint64_t *src, unsigned int pgcount)
 {
 	if (!pgcount)
 		return 0;
-}
+}*/
 

@@ -3,7 +3,7 @@
 #include <wnos/spinlock.h>
 
 /* cpu_data[0] will always reference the current CPU */
-cpu_t** cpu_data;
+/*cpu_t** cpu_data;
 PRIVATE unsigned int next_id;
 PRIVATE spinlock_t nextid_lock = 0;
 
@@ -31,4 +31,4 @@ PUBLIC int cpu_init()
 	vmm_maptofree(areabase, pages);
 
 	return 0;
-}
+}*/

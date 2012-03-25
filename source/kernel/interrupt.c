@@ -205,7 +205,7 @@ int exceptions_init()
  * need to use the PIC to recieve the PIT's interrupts
  */
 
-volatile PRIVATE u64 ticks = 0;
+PRIVATE volatile u64 ticks = 0;
 void pit_tick()
 {
 	ticks++;

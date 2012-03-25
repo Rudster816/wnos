@@ -165,7 +165,7 @@ PRIVATE inline void alloc_pml4e(int w, uint64_t flags)
 PRIVATE uint64_t* vmm_PML4;
 PRIVATE uint64_t nextaddr = 0;
 
-PRIVATE uint64_t inline early_nextfree()
+PRIVATE inline uint64_t early_nextfree()
 {
 	globals.earlypages++;
 	nextaddr += 4096;
@@ -393,12 +393,12 @@ PUBLIC int vmm_appagesetup()
 {
 	/* Start out with the EXACT same paging structures as the BSP */
 	write_cr3((uint64_t)vmm_PML4);
+	return 0;
 }
 
 PUBLIC int vmm_maptofree(void* vaddr, unsigned int pages)
 {
-	int pml4e, pdpe, pde, pte, i;
-	unsigned int pgcount;
+	unsigned int pml4e, pdpe, pde, pte, i, pgcount;
 
 	while (pages)
 	{
@@ -423,8 +423,7 @@ PUBLIC int vmm_maptofree(void* vaddr, unsigned int pages)
 
 PUBLIC int vmm_maptophys(void* vaddr, void* paddr, unsigned int pages)
 {
-	int pml4e, pdpe, pde, pte, i;
-	unsigned int pgcount;
+	unsigned int pml4e, pdpe, pde, pte, i, pgcount;
 	u64 uintpaddr = (u64)paddr;
 
 	while (pages)
@@ -449,8 +448,7 @@ PUBLIC int vmm_maptophys(void* vaddr, void* paddr, unsigned int pages)
 
 PUBLIC int vmm_maptovalue(void* vaddr, uint64_t value, unsigned int pages)
 {
-	int pml4e, pdpe, pde, pte, i;
-	unsigned int pgcount;
+	unsigned int pml4e, pdpe, pde, pte, i, pgcount;
 
 	while (pages)
 	{

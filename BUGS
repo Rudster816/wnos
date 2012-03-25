@@ -3,7 +3,5 @@ Because everyone likes to add a bunch of cool new stuff before debugging whateve
 March 24, 2012:
 early_pgalloc and early_stackalloc will page fault if the PTE hits 512 and needs to be reset, and PDE has to be incremented.
 
-EZLOADER doesn't work on Bochs or Vmware.
-
 
 ...and a million other ones I haven't found yet.....

@@ -23,9 +23,6 @@
 ; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 ; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-; The views and conclusions contained in the software and documentation are those
-; of the authors and should not be interpreted as representing official policies, 
-; either expressed or implied, of the FreeBSD Project.
 
 RealStack dw 0
 MemorySource dq 0
@@ -377,7 +374,6 @@ LoadFileSection:					; EAX is file offset, EBX is file size, ECX is memory size
 	
 PModeMemCpy:
 	pushad
-	push ds
 	push es
 	push fs
 	push gs
@@ -397,15 +393,15 @@ PModeMemCpy:
 	jmp 0x08:PModeMemCpy_Protected	; Long jump to protected mode
 	
 	PModeReturn:
-		sti
 		mov ax, 0
+		mov ds, ax
 		mov ss, ax
 		mov sp, [RealStack]
 		pop gs
 		pop fs
 		pop es
-		pop ds
 		popad
+		sti
 		ret
 	
 bits 32
@@ -440,8 +436,6 @@ PModeMemCpy_Protected:
 
 bits 16
 Protected16Bits:
-	xor ax, ax
-	mov ds, ax
 	mov eax, cr0
 	and eax, 0xFFFFFFFE
 	mov cr0, eax					; Disable protected mode
